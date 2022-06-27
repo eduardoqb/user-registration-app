@@ -3,20 +3,21 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
+        <div class="col-md-4 pt-1">
+            <div class="card rounded-4">
                 <div class="card-body">
+                    <div class="text-center">
+                        <img src="{{url('images/logo-z.png')}}" width="80" alt="Logo">
+                    </div>
+                    <h2 class="fw-bold text-muted text-center pt-3">{{ __('Iniciar Sesión') }}</h2>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
+                        <div class="row">
+                            <div class="col pt-3 pb-2">
+                                <label for="email" class="form-label fw-bold fs-5 text-muted">
+                                    Usuario o correo
+                                </label>
+                                <input type="email" name="email" id="email" class="form-control rounded-4 @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -24,13 +25,13 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
+                        <div class="row">
+                            <div class="col py-2">
+                                <label for="password" class="form-label fw-bold fs-5 text-muted">
+                                    Contraseña
+                                </label>
+                                <br>
+                                <input type="password" name="password" id="password" class="form-control rounded-4 @error('password') is-invalid @enderror" required autocomplete="current-password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -38,32 +39,30 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Recordarme') }}
                                     </label>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
+                        @if(session('info'))
+                        {{ session('info') }}
+                        @endif
+                        <div class="row">
+                            <div class="col pt-2 pb-3 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill">Entrar</button>
                             </div>
                         </div>
+                        @if (Route::has('password.request'))
+                            <a class="link-secondary" href="{{ route('password.request') }}">
+                                {{ __('Olvidé la contraseña') }}
+                            </a>
+                        @endif
                     </form>
                 </div>
             </div>

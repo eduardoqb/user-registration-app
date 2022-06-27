@@ -1,50 +1,36 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use App\Models\Usuario;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+Route::get('/logout', [App\Http\Controllers\UserController::class, 'logout']);
 
-Route::get('/', function () {
-    return view('login');
-})->name('/');;
-
-Route::post('entrar', function (Request $request) {
+Route::post('/entrar', function (Request $request) {
     $values = $request->all();
 
     $usuario = Usuario::where('email', $values['email'])->where('password', $values['password'])->first();
     if($usuario === null){
         return redirect()->route('/')->with('info', 'Usuario o contraseña incorrectos');
     }else{
-        return redirect()->route('main')->with('info', 'Bienvenido '.$usuario['nombres']);
+        return redirect()->route('list')->with('info', 'Bienvenido '.$usuario['nombres']);
     }
 
 });
 
-Route::get('main', function () {
-    return view('usuarios.main');
-})->name('main');
+Route::get('/list', [UserController::class, 'list'])->name('list');
 
-Route::get('usuarios/{id}', function (Request $request) {
+Route::get('/usuarios/{id}', function (Request $request) {
 
     $id = $request->route('id');
     $usuario = Usuario::where('id', $id)->get();
     echo $usuario;
 });
 
-Route::post('usuarios/registrar', function (Request $request) {
+Route::post('/usuarios/registrar', function (Request $request) {
     
     $values = $request->all();
     $values = $values['values'];
@@ -69,7 +55,7 @@ Route::post('usuarios/registrar', function (Request $request) {
     //return redirect()->route('usuarios')->with('info', 'Usuario registrado exitosamente');
 });
 
-Route::post('usuarios/editar', function (Request $request) {
+Route::post('/usuarios/editar', function (Request $request) {
     
     $values = $request->all();
     $values = $values['values'];
@@ -93,7 +79,7 @@ Route::post('usuarios/editar', function (Request $request) {
 
 });
 
-Route::post('usuarios/eliminar', function (Request $request) {
+Route::post('/usuarios/eliminar', function (Request $request) {
     
     $values = $request->all();
     $id = $values['values'];
@@ -104,7 +90,7 @@ Route::post('usuarios/eliminar', function (Request $request) {
 
 });
 
-Route::post('usuarios/deshacerEliminar', function (Request $request) {
+Route::post('/usuarios/deshacerEliminar', function (Request $request) {
     
     $values = $request->all();
     $id = $values['values'];
@@ -115,7 +101,7 @@ Route::post('usuarios/deshacerEliminar', function (Request $request) {
 
 });
 
-Route::get('usuarios', function () {
+Route::get('/usuarios', function () {
     $response = "";
 
     $iconEdit = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000" viewBox="0 0 16 16">
@@ -145,3 +131,7 @@ Route::get('usuarios', function () {
     }
     echo $response;
 });
+
+Auth::routes();
+
+Route::get('/register', [App\Http\Controllers\UserController::class, 'showRegistrationForm'])->name('register');

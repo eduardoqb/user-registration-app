@@ -10,4 +10,11 @@ class Ciudad extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    /**
+     * Nombre de la tabla asociada con el modelo.
+     * 
+     * @var string
+     */
+    protected $table = 'ciudades';
 }
